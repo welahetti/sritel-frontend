@@ -1,0 +1,7 @@
+{
+    "bills": [
+      { "id": 1, "date": "2025-01-01", "amount": 25.5, "status": "Paid" },
+      { "id": 2, "date": "2025-02-01", "amount": 30.75, "status": "Unpaid" }
+    ]
+  }
+  
