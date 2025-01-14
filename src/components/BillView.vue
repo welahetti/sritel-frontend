@@ -12,6 +12,7 @@
         <p><strong>Amount:</strong> ${{ bill.amount }}</p>
         <p><strong>Status:</strong> {{ bill.status }}</p>
         <button @click="viewBillDetails(bill.id)">View Details</button>
+        <button @click="redirectToPayment(bill.id)">Pay Now</button>
       </div>
 
       <h2>Past Bills</h2>
@@ -54,6 +55,10 @@ export default {
     },
     viewBillDetails(id) {
       this.$router.push(`/bills/${id}`);
+    },
+    redirectToPayment(id) {
+      // Redirect to the PaymentView with the selected bill ID
+      this.$router.push(`/payment/${id}`);
     },
   },
   mounted() {
