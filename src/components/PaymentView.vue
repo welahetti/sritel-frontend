@@ -47,21 +47,27 @@ export default {
     };
   },
   methods: {
-    async fetchPayments() {
-
-      try {
-        const billId = this.$route.params.id; // Retrieve bill ID from route
-        console.log('Fetching bill details for ID:', billId); // Debugging log
-        // Fetching the payment details from API
-        const response = await axios.get('http://localhost:3000/payments/123');
-        this.payments = response.data.payments; // Update the payments array
-      } catch (err) {
-        console.error('Error fetching payments:', err);
-        this.error = 'Failed to load payment details. Please try again.';
-      } finally {
-        this.loading = false;
-      }
-    },
+    async fetchPayments(billId) {
+  try {
+    console.log('Fetching payments for billId:', billId);
+    // Filter payments using the billId
+    const response = await axios.get('http://localhost:3000/payments');
+    
+    // Filter the payments based on the billId
+    const paymentsForBill = response.data.filter(payment => payment.billId === parseInt(billId));
+    
+    if (paymentsForBill.length === 0) {
+      this.error = `No payment data found for bill ID ${billId}.`;
+    } else {
+      this.payments = paymentsForBill;
+    }
+  } catch (err) {
+    console.error('Error fetching payments:', err);
+    this.error = 'Failed to load payment details. Please try again.';
+  } finally {
+    this.loading = false;
+  }
+},
     maskCardNumber(cardNumber) {
       // Mask the card number except for the last 4 digits
       const cardStr = cardNumber.toString();
@@ -69,8 +75,18 @@ export default {
     },
   },
   mounted() {
-    this.fetchPayments(); // Fetch payments when component is mounted
+    const billId = this.$route.params.id;  // Accessing billId from route params
+    console.log('Mounted: billId:', billId);  // Debugging log
+    this.fetchPayments(billId); // Fetch payments when component is mounted
   },
+  watch: {
+  '$route'(to) {
+    const billId = to.params.id;  // Get the billId from the updated route params
+    console.log('Route changed: New billId:', billId);  // Debugging log
+    this.fetchPayments(billId);  // Fetch payment details when route changes
+  }
+
+  }
 };
 </script>
 
@@ -108,5 +124,3 @@ export default {
   background-color: #f9f9f9;
 }
 </style>
-
- 

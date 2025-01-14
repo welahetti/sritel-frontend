@@ -6,7 +6,7 @@ import PaymentView from '../components/PaymentView.vue';
 const routes = [
   { path: '/bills', component: BillView },
   // Define other routes as necessary
-  { path: '/payments/:billId', component: PaymentView},
+  { path: '/payments/:id', component: PaymentView},
   
 ];
 

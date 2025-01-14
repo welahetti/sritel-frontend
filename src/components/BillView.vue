@@ -58,7 +58,7 @@ export default {
     },
     redirectToPayment(id) {
       // Redirect to the PaymentView with the selected bill ID
-      this.$router.push(`/payment/${id}`);
+      this.$router.push(`/payments/${id}`);
     },
   },
   mounted() {
