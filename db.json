@@ -1,7 +1,17 @@
 {
     "bills": [
       { "id": 1, "date": "2025-01-01", "amount": 25.5, "status": "Paid" },
-      { "id": 2, "date": "2025-02-01", "amount": 30.75, "status": "Unpaid" }
+      { "id": 2, "date": "2025-02-01", "amount": 30.75, "status": "Unpaid" },
+      { "id": 123, "date": "2025-02-01", "amount": 30.75, "status": "Unpaid" },
+      { "id": 234, "date": "2025-02-01", "amount": 30.75, "status": "Unpaid" }
+
+
+    ],
+
+    "payments": [
+      { "id": 1, "billId": 123, "CardNo": 234523456345, "ExpiryDate": "2025-01-30", "CVV": 354, "amount": "100" },
+      { "id": 2, "billId": 234, "CardNo": 346245678646, "ExpiryDate": "2025-02-01", "CVV": 375, "amount": "200" }
     ]
+
   }
   
