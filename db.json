@@ -11,7 +11,18 @@
     "payments": [
       { "id": 1, "billId": 123, "CardNo": 234523456345, "ExpiryDate": "2025-01-30", "CVV": 354, "amount": "100" },
       { "id": 2, "billId": 234, "CardNo": 346245678646, "ExpiryDate": "2025-02-01", "CVV": 375, "amount": "200" }
-    ]
+    ],
+
+    "notifications": [
+        { "id": 1, "title": "Upcoming Bill Due", "message": "Your next bill is due on 2025-02-01." },
+        { "id": 2, "title": "Service Activation", "message": "Your new service has been activated successfully." }
+    ],
+
+    "customers": [
+    { "id": 1, "name": "John Doe", "email": "john.doe@example.com", "phone": "123-456-7890", "address": "123 Elm St, Springfield" },
+    { "id": 2, "name": "Jane Smith", "email": "jane.smith@example.com", "phone": "987-654-3210", "address": "456 Oak St, Metropolis" },
+    { "id": 3, "name": "Bob Johnson", "email": "bob.johnson@example.com", "phone": "555-555-5555", "address": "789 Pine St, Gotham" }
+  ]
 
   }
   
