@@ -9,11 +9,7 @@ const routes = [
   // Define other routes as necessary
   { path: '/payments/:id', component: PaymentView},
   { path: '/dashboard', component: DashboardView},
-  {
-    path: '/customers/:id',
-    component: CustomerView,
-    props: true, // Pass route params as props to the component
-  },
+  { path: '/customers/:id',component: CustomerView},
 ];
 
 const router = createRouter({

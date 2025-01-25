@@ -59,7 +59,6 @@
 import axios from 'axios'; // Import axios
 
 export default {
-  props: ['id'], // Accept the customer ID as a prop
   data() {
     return {
       customer: null, // Holds the fetched customer data
@@ -68,30 +67,45 @@ export default {
   mounted() {
     this.fetchCustomerProfile(); // Fetch customer data when component is mounted
   },
+  watch: {
+    // Watch for changes in the route parameter
+    '$route.params.id': 'fetchCustomerProfile',
+  },
   methods: {
     async fetchCustomerProfile() {
-      try {
-        const response = await axios.get('http://localhost:3000/customers');
-        const data = response.data;
+  try {
+    const response = await axios.get('http://localhost:3000/customers');
+    const data = response.data;
 
-        // Find the customer by ID (ensure props.id is parsed as an integer)
-        this.customer = data.customers.find(
-          (customer) => customer.id === parseInt(this.id)
-        );
+    // Log the response to inspect its structure
+    console.log('API Response:', data);
 
-        if (!this.customer) {
-          console.error(`Customer with ID ${this.id} not found.`);
-        }
-      } catch (error) {
-        console.error('Error fetching customer data:', error);
-      }
-    },
+    if (!data ) {
+      console.error('Customers data is not available.');
+      return;
+    }
+
+    // Find the customer by ID (ensure it's parsed as an integer)
+    const id = this.$route.params.id;
+    this.customer = data.find(
+      (customer) => customer.id === id
+    );
+
+    if (!this.customer) {
+      console.error(`Customer with ID ${id} not found.`);
+    }
+  } catch (error) {
+    console.error('Error fetching customer data:', error);
+  }
+}
+,
     goBack() {
       this.$router.push('/dashboard'); // Navigate back to the dashboard
     },
   },
 };
 </script>
+
 
 <style scoped>
 .customer-page {
