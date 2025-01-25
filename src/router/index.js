@@ -3,6 +3,8 @@ import BillView from '../components/BillView.vue';
 import PaymentView from '../components/PaymentView.vue';
 import DashboardView from '../components/DashboardView.vue';
 import CustomerView from '../components/CustomerView.vue';
+//import CustomerView from '../components/ChangePasswordView.vue';
+
 
 const routes = [
   { path: '/bills', component: BillView },
@@ -10,6 +12,7 @@ const routes = [
   { path: '/payments/:id', component: PaymentView},
   { path: '/dashboard', component: DashboardView},
   { path: '/customers/:id',component: CustomerView},
+  { path: '/change-password', component: () => import('../components/ChangePasswordView.vue'),},
 ];
 
 const router = createRouter({
