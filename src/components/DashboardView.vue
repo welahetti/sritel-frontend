@@ -16,6 +16,9 @@
       <button class="dashboard-button" @click="navigateToCustomer(1)">
         Customers
       </button>
+      <button class="dashboard-button" @click="navigateTo('services')">
+  Services
+</button>
     </div>
   </div>
 </template>

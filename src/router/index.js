@@ -13,6 +13,7 @@ const routes = [
   { path: '/dashboard', component: DashboardView},
   { path: '/customers/:id',component: CustomerView},
   { path: '/change-password', component: () => import('../components/ChangePasswordView.vue'),},
+  { path: '/services', component: () => import('../components/ServicesView.vue'),},
 ];
 
 const router = createRouter({
