@@ -1,200 +1,144 @@
-/*<template>
-  <div class="customer-view">
-    <h1>Customer Profile</h1>
-
-    <!-- Loading/Error Messages -->
-    <div v-if="loading">Loading...</div>
-    <div v-if="error" class="error">{{ error }}</div>
-
-    <!-- Customer Profile -->
-    <div v-if="!loading && !error">
-      <div class="profile-section">
-        <h2>Profile Information</h2>
-        <p><strong>Name:</strong> {{ customer.name }}</p>
-        <p><strong>Email:</strong> {{ customer.email }}</p>
-        <p><strong>Phone:</strong> {{ customer.phone }}</p>
-        <button @click="toggleEdit">Edit Profile</button>
-      </div>
-
-      <!-- Edit Profile Form -->
-      <div v-if="isEditing" class="edit-section">
-        <h2>Edit Profile</h2>
-        <form @submit.prevent="saveProfile">
-          <div>
-            <label for="name">Name:</label>
-            <input type="text" v-model="editForm.name" id="name" required />
-          </div>
-          <div>
-            <label for="phone">Phone:</label>
-            <input type="text" v-model="editForm.phone" id="phone" required />
-          </div>
-          <button type="submit">Save</button>
-          <button type="button" @click="cancelEdit">Cancel</button>
-        </form>
-      </div>
-
-      <!-- Notifications Section -->
-      <div class="notifications-section">
-        <h2>Manage Notifications</h2>
-        <div>
-          <label>
-            <input type="checkbox" v-model="notifications.email" />
-            Receive Email Notifications
-          </label>
-        </div>
-        <div>
-          <label>
-            <input type="checkbox" v-model="notifications.sms" />
-            Receive SMS Notifications
-          </label>
-        </div>
-        <div>
-          <label>
-            <input type="checkbox" v-model="notifications.push" />
-            Receive Push Notifications
-          </label>
-        </div>
-        <button @click="updateNotifications">Update Notifications</button>
-      </div>
+<template>
+  <div class="customer-page">
+    <!-- Header -->
+    <div class="customer-header">
+      <button class="back-button" @click="goBack">&lt;</button>
+      <h2>Customer Details</h2>
     </div>
+
+    <!-- Customer Form -->
+    <form class="customer-form">
+      <div v-if="customer">
+        <div class="form-group">
+          <label for="customer-name"><strong>Name:</strong></label>
+          <input
+            id="customer-name"
+            type="text"
+            v-model="customer.name"
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="customer-email"><strong>Email:</strong></label>
+          <input
+            id="customer-email"
+            type="email"
+            v-model="customer.email"
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="customer-phone"><strong>Phone:</strong></label>
+          <input
+            id="customer-phone"
+            type="text"
+            v-model="customer.phone"
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="customer-address"><strong>Address:</strong></label>
+          <textarea
+            id="customer-address"
+            v-model="customer.address"
+            rows="3"
+            readonly
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Loading message while data is being fetched -->
+      <div v-else>
+        <p>Loading customer profile...</p>
+      </div>
+    </form>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'; // Import axios
 
 export default {
-  name: 'CustomerView',
+  props: ['id'], // Accept the customer ID as a prop
   data() {
     return {
-      customer: {},
-      editForm: { name: '', phone: '' },
-      notifications: { email: false, sms: false, push: false },
-      isEditing: false,
-      loading: true,
-      error: null,
+      customer: null, // Holds the fetched customer data
     };
   },
-  methods: {
-    async fetchCustomerDetails() {
-      try {
-        const response = await axios.get('http://localhost:3000/customer'); // Replace with your endpoint
-        this.customer = response.data;
-        this.notifications = {
-          email: response.data.notifications.email,
-          sms: response.data.notifications.sms,
-          push: response.data.notifications.push,
-        };
-      } catch (err) {
-        this.error = 'Failed to load customer details. Please try again.';
-      } finally {
-        this.loading = false;
-      }
-    },
-    toggleEdit() {
-      this.isEditing = true;
-      this.editForm = { ...this.customer };
-    },
-    cancelEdit() {
-      this.isEditing = false;
-      this.editForm = { name: '', phone: '' };
-    },
-    async saveProfile() {
-      try {
-        const response = await axios.put('http://localhost:3000/customer', this.editForm); // Replace with your endpoint
-        this.customer = response.data;
-        this.isEditing = false;
-        alert('Profile updated successfully.');
-      } catch (err) {
-        this.error = 'Failed to update profile. Please try again.';
-      }
-    },
-    async updateNotifications() {
-      try {
-        await axios.put('http://localhost:3000/notifications', this.notifications); // Replace with your endpoint
-        alert('Notifications updated successfully.');
-      } catch (err) {
-        this.error = 'Failed to update notifications. Please try again.';
-      }
-    },
-  },
   mounted() {
-    this.fetchCustomerDetails();
+    this.fetchCustomerProfile(); // Fetch customer data when component is mounted
+  },
+  methods: {
+    async fetchCustomerProfile() {
+      try {
+        const response = await axios.get('http://localhost:3000/customers');
+        const data = response.data;
+
+        // Find the customer by ID (ensure props.id is parsed as an integer)
+        this.customer = data.customers.find(
+          (customer) => customer.id === parseInt(this.id)
+        );
+
+        if (!this.customer) {
+          console.error(`Customer with ID ${this.id} not found.`);
+        }
+      } catch (error) {
+        console.error('Error fetching customer data:', error);
+      }
+    },
+    goBack() {
+      this.$router.push('/dashboard'); // Navigate back to the dashboard
+    },
   },
 };
 </script>
 
 <style scoped>
-.customer-view {
-  max-width: 800px;
-  margin: 20px auto;
+.customer-page {
   padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
 }
 
-.profile-section,
-.edit-section,
-.notifications-section {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 15px;
+.customer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.back-button {
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+.form-group {
   margin-bottom: 15px;
 }
 
-.error {
-  color: red;
-}
-</style>*/
-
-<template>
-  <div>
-    <h1>Customer Profile</h1>
-    <div v-if="customer">
-      <p><strong>Name:</strong> {{ customer.name }}</p>
-      <p><strong>Email:</strong> {{ customer.email }}</p>
-      <p><strong>Phone:</strong> {{ customer.phone }}</p>
-      <p><strong>Address:</strong> {{ customer.address }}</p>
-    </div>
-    <div v-else>
-      <p>Loading customer profile...</p>
-    </div>
-  </div>
-</template>
-
-<script>
-import { mockDb } from './mockDb'; // Import the mock database
-
-export default {
-  data() {
-    return {
-      customer: null, // Will hold the customer data
-      customerId: 1 // Example customer ID; this can be dynamic
-    };
-  },
-  mounted() {
-    // Simulate fetching customer data from the mock DB
-    this.fetchCustomerProfile();
-  },
-  methods: {
-    fetchCustomerProfile() {
-      // Find the customer from the mock DB by ID
-      const customer = mockDb.find(c => c.id === this.customerId);
-      if (customer) {
-        this.customer = customer;
-      }
-    }
-  }
-};
-</script>
-
-<style scoped>
-/* Add styles for the customer profile */
-h1 {
-  color: #333;
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
-p {
-  font-size: 16px;
-  margin-bottom: 10px;
+input,
+textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+textarea {
+  resize: none;
 }
 </style>
-
