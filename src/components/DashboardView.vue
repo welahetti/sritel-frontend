@@ -13,7 +13,7 @@
       <button class="dashboard-button" @click="navigateTo('notifications')">
         Notifications
       </button>
-      <button class="dashboard-button" @click="navigateTo('customers')">
+      <button class="dashboard-button" @click="navigateToCustomer(1)">
         Customers
       </button>
     </div>
@@ -26,6 +26,10 @@ export default {
   methods: {
     navigateTo(route) {
       this.$router.push(`/${route}`);
+    },
+    // Updated to navigate to customer details with a dynamic ID (e.g., 1)
+    navigateToCustomer(customerId) {
+      this.$router.push(`/customers/${customerId}`);
     },
   },
 };

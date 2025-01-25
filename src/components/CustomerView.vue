@@ -46,66 +46,72 @@
           ></textarea>
         </div>
       </div>
-
       <!-- Loading message while data is being fetched -->
       <div v-else>
         <p>Loading customer profile...</p>
       </div>
     </form>
+
+    <!-- Additional Buttons -->
+    <div class="button-container">
+      <button class="action-button" @click="navigateToChangePassword">
+        Change Your Password
+      </button>
+      <button class="action-button" @click="navigateToServiceToggle">
+        Activate/Deactivate Services
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'; // Import axios
+import axios from 'axios';
 
 export default {
   data() {
     return {
-      customer: null, // Holds the fetched customer data
+      customer: null,
     };
   },
   mounted() {
-    this.fetchCustomerProfile(); // Fetch customer data when component is mounted
+    this.fetchCustomerProfile();
   },
   watch: {
-    // Watch for changes in the route parameter
     '$route.params.id': 'fetchCustomerProfile',
   },
   methods: {
     async fetchCustomerProfile() {
-  try {
-    const response = await axios.get('http://localhost:3000/customers');
-    const data = response.data;
+      try {
+        const response = await axios.get('http://localhost:3000/customers');
+        const data = response.data;
 
-    // Log the response to inspect its structure
-    console.log('API Response:', data);
+        if (!data) {
+          console.error('Customers data is not available.');
+          return;
+        }
 
-    if (!data ) {
-      console.error('Customers data is not available.');
-      return;
-    }
+        const id = this.$route.params.id;
+        this.customer = data.find((customer) => customer.id === id);
 
-    // Find the customer by ID (ensure it's parsed as an integer)
-    const id = this.$route.params.id;
-    this.customer = data.find(
-      (customer) => customer.id === id
-    );
-
-    if (!this.customer) {
-      console.error(`Customer with ID ${id} not found.`);
-    }
-  } catch (error) {
-    console.error('Error fetching customer data:', error);
-  }
-}
-,
+        if (!this.customer) {
+          console.error(`Customer with ID ${id} not found.`);
+        }
+      } catch (error) {
+        console.error('Error fetching customer data:', error);
+      }
+    },
     goBack() {
-      this.$router.push('/dashboard'); // Navigate back to the dashboard
+      this.$router.push('/dashboard');
+    },
+    navigateToChangePassword() {
+      this.$router.push('/change-password'); // Navigate to the Change Password page
+    },
+    navigateToServiceToggle() {
+      this.$router.push('/services'); // Navigate to the Activate/Deactivate Services page
     },
   },
 };
 </script>
-
 
 <style scoped>
 .customer-page {
@@ -154,5 +160,31 @@ textarea {
 
 textarea {
   resize: none;
+}
+
+.button-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.action-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.action-button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.action-button:active {
+  background-color: #3e8e41;
 }
 </style>
