@@ -7,6 +7,7 @@ import LoginView from '../components/LoginView.vue';
 import NotificationView from '../components/NotificationView.vue';
 import WebPortalBills from '../components/WebPortalBill.vue';
 import GenerateBillView from '../components/GenerateBillView.vue';
+import RegistrationView from "@/components/RegistrationView.vue";
 
 
 
@@ -22,7 +23,7 @@ const routes = [
   { path: '/notifications', component: NotificationView },
   { path: '/web/bills', component: WebPortalBills }, // Web portal bills screen
   { path: '/web/generate-bill', component: GenerateBillView }, // Generate bill screen
-
+  { path: "/register", component: RegistrationView },
   //{ path: "*", redirect: "/login",},
 ];
 

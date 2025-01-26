@@ -33,6 +33,12 @@
         <!-- Login Button -->
         <button type="submit" class="login-button">Login</button>
       </form>
+
+      <!-- Sign Up Button -->
+      <p class="signup-text">
+        Don't have an account? 
+        <button @click="navigateToSignUp" class="signup-button">Sign Up</button>
+      </p>
     </div>
   </div>
 </template>
@@ -70,6 +76,10 @@ export default {
         console.error("Login error:", error);
         this.errorMessage = "An error occurred. Please try again.";
       }
+    },
+    navigateToSignUp() {
+      // Redirect to the registration view
+      this.$router.push("/register");
     },
   },
 };
@@ -135,6 +145,26 @@ input {
 
 .login-button:hover {
   background-color: #45a049;
+}
+
+.signup-text {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+.signup-button {
+  background: none;
+  color: #4caf50;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.signup-button:hover {
+  color: #45a049;
 }
 
 .error-message {
