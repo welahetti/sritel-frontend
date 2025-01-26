@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-view">
-    <h1>Sri-Tel Dashboard</h1>
+    <h1>Sri-Care Dashboard</h1>
     <p class="tagline">We Care Always, Empowering Your Connectivity!</p>
 
     <div class="button-container">
