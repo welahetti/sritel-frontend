@@ -8,9 +8,9 @@
     <div v-if="bills.length > 0">
       <h2>Current Bill</h2>
       <div class="bill-card" v-for="bill in currentBill" :key="bill.id">
-        <p><strong>Date:</strong> {{ bill.date }}</p>
+        <p><strong>Date:</strong> {{ bill.dueDate }}</p>
         <p><strong>Amount:</strong> ${{ bill.amount }}</p>
-        <p><strong>Status:</strong> {{ bill.status }}</p>
+        <p><strong>Status:</strong> {{ bill.isPaid ? 'Paid' : 'Unpaid' }}</p>
         <button @click="viewBillDetails(bill.id)">View Details</button>
         <button @click="redirectToPayment(bill.id)">Pay Now</button>
       </div>
@@ -41,26 +41,27 @@ export default {
     };
   },
   methods: {
-    async fetchBills() {
-      try {
-        const response = await axios.get('http://localhost:3000/bills');
-        this.bills = response.data;
-        this.currentBill = this.bills.filter((bill) => bill.status === 'Unpaid');
-        this.pastBills = this.bills.filter((bill) => bill.status === 'Paid');
-      } catch (err) {
-        this.error = 'Failed to load bills. Please try again.';
-      } finally {
-        this.loading = false;
-      }
-    },
-    viewBillDetails(id) {
-      this.$router.push(`/bills/${id}`);
-    },
-    redirectToPayment(id) {
-      // Redirect to the PaymentView with the selected bill ID
-      this.$router.push(`/payments/${id}`);
-    },
+  async fetchBills() {
+    try {
+      const userId = "D541C9F3-1811-48E6-B377-213AD38B1562"; // Replace with the actual user ID
+      const response = await axios.get(`https:/localhost:7066/api/billing/user/${userId}`);      
+      this.bills = response.data;
+      console.log(this.bills)
+      this.currentBill = this.bills.filter((bill) => bill.isPaid === false);
+      this.pastBills = this.bills.filter((bill) => bill.isPaid === true);
+    } catch (err) {
+      this.error = 'Failed to load bills. Please try again.';
+    } finally {
+      this.loading = false;
+    }
   },
+  viewBillDetails(id) {
+    this.$router.push(`/bills/${id}`);
+  },
+  redirectToPayment(id) {
+    this.$router.push(`/payments/${id}`);
+  },
+},
   mounted() {
     this.fetchBills();
   },
